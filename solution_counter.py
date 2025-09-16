@@ -763,7 +763,34 @@ vectors = [
         ]
 # vectors += [[0,-9],[-14,-4],[-14,-5],[-14,-6]]
 vectors += [[-14,-3],[-14,-4],[-14,-5],[-14,-6]]
+
+vectors = []
+for i in range(-8,9):
+    for j in range(-7,8):
+        vectors.append([i,j])
+
+for i in range(-5,6):
+    vectors.append([-9,i])
+    vectors.append([9,i])
+
+for i in range(-2,3):
+    vectors.append([-10,i])
+    vectors.append([10,i])
+
+for i in range(-7,8):
+    vectors.append([i,8])
+    vectors.append([i,-8])
+
+for i in range(-5,6):
+    vectors.append([i,-9])
+    vectors.append([i,9])
+
+for i in range(-2,3):
+    vectors.append([i,-10])
+    vectors.append([i,10])
+
 result = count_close_pairs(vectors, d)
+print(f"Side of inputted solution: {len(vectors)}")
 print(f"Number of pairs with distance <= {d}: {result}")
 
 
