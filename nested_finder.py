@@ -182,7 +182,7 @@ def generate_solutions_with_step_storage(m, n, d, save_png=True):
 
     return chains
 
-n = 400
+n = 50
 m = 25
 d = 3
 chains = generate_solutions_with_step_storage(m, n, d, save_png=True)
