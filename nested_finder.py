@@ -90,7 +90,7 @@ def save_step_info(step_index, solutions, new_edges_list, total_edges_list, n, d
 # ------------------------
 def generate_solutions_with_step_storage(m, n, d, init_solutions = [[(0,0)]], save_png=True):
     solutions = init_solutions
-    chains = [init_solutions]
+    chains = [[solution] for solution in init_solutions]
     init_num_vertices = len(init_solutions[0])
     if init_num_vertices == 1:
         # Step 0 info
@@ -104,7 +104,16 @@ def generate_solutions_with_step_storage(m, n, d, init_solutions = [[(0,0)]], sa
     for i in range(init_num_vertices+1, n+1):
         print(i)
         entries = []
+        print('Current solutions:')
+        print(solutions)
+        print('Current chains:')
+        print(chains)
+        
+        print('zip(solutions, chains)')
+        print(tuple(zip(solutions, chains)))
         for sol, chain in zip(solutions, chains):
+            print('sol')
+            print(sol)
             candidates = [
                 (x, y)
                 for x in range(-i-math.ceil(d)-1, 2)
@@ -183,7 +192,7 @@ def generate_solutions_with_step_storage(m, n, d, init_solutions = [[(0,0)]], sa
 
 n = 350
 m = 25
-d = 6
-# init_solutions = [[(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(0,6),(0,7)]]
+d = 1.1
+init_solutions = [[(0,0),(0,1),(0,2),(0,3)],[(2,2),(2,3),(3,2),(3,3)]]
 chains = generate_solutions_with_step_storage(m, n, d, init_solutions, save_png=True)
 
