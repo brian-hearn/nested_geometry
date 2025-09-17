@@ -77,7 +77,7 @@ def save_step_info(step_index, solutions, new_edges_list, total_edges_list, n, d
     os.makedirs(folder_path, exist_ok=True)
     serializable_solutions = [ [pt for pt in sol] for sol in solutions ]
     step_data = {
-        'step_index': step_index,
+        'number_of_vertices': step_index + 1,
         'solutions': serializable_solutions,
         'new_edges': new_edges_list,
         'total_edges': total_edges_list
@@ -182,8 +182,8 @@ def generate_solutions_with_step_storage(m, n, d, save_png=True):
 
     return chains
 
-n = 50
+n = 400
 m = 25
-d = 3
+d = 1.5
 chains = generate_solutions_with_step_storage(m, n, d, save_png=True)
 
