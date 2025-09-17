@@ -2,10 +2,8 @@ import matplotlib.pyplot as plt
 import os
 import math
 import json
+from json_reader import *
 
-# ------------------------
-# Utility functions
-# ------------------------
 def distance(p, q):
     return math.hypot(p[0]-q[0], p[1]-q[1])
 
@@ -90,26 +88,27 @@ def save_step_info(step_index, solutions, new_edges_list, total_edges_list, n, d
 # ------------------------
 # Main solver with step-by-step storage
 # ------------------------
-def generate_solutions_with_step_storage(m, n, d, save_png=True):
-    solutions = [[(0,0)]]
-    chains = [[[(0,0)]]]
-
-    # Step 0 info
-    new_edges_list = [0]
-    total_edges_list = [0]
-    if save_png:
-        save_step_png(solutions, 0, n, d)
-    save_step_info(0, solutions, new_edges_list, total_edges_list, n, d)
+def generate_solutions_with_step_storage(m, n, d, init_solutions = [[(0,0)]], save_png=True):
+    solutions = init_solutions
+    chains = [init_solutions]
+    init_num_vertices = len(init_solutions[0])
+    if init_num_vertices == 1:
+        # Step 0 info
+        new_edges_list = [0]
+        total_edges_list = [0]
+        if save_png:
+            save_step_png(solutions, 0, n, d)
+        save_step_info(0, solutions, new_edges_list, total_edges_list, n, d)
 
     # Main loop
-    for i in range(2, n+1):
+    for i in range(init_num_vertices+1, n+1):
+        print(i)
         entries = []
         for sol, chain in zip(solutions, chains):
-            # Candidates restricted by solution size
             candidates = [
                 (x, y)
-                for x in range(-i, 2)
-                for y in range(-i, i+1)
+                for x in range(-i-math.ceil(d)-1, 2)
+                for y in range(-i-math.ceil(d)-1, i+math.ceil(d)+1)
                 if (x, y) not in sol
             ]
             for p in candidates:
@@ -182,8 +181,9 @@ def generate_solutions_with_step_storage(m, n, d, save_png=True):
 
     return chains
 
-n = 400
+n = 350
 m = 25
-d = 1.5
-chains = generate_solutions_with_step_storage(m, n, d, save_png=True)
+d = 6
+# init_solutions = [[(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(0,6),(0,7)]]
+chains = generate_solutions_with_step_storage(m, n, d, init_solutions, save_png=True)
 
