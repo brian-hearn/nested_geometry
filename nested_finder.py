@@ -185,7 +185,7 @@ def generate_solutions_with_step_storage(n, d, init_solutions = [[(0,0)]], save_
     return chains
 
 # Terminate after finding solutions with n vertices
-n = 250
+n = 800
 # Join all vertices within a distance of d with an edge
 d = 5
 # Toggle whether pngs of solutions are saved
@@ -193,10 +193,13 @@ save_png=True
 
 # Specify initial solutions
 # Can be loaded from existing JSONs
-init_solutions = [[(0,0)]]
-# init_vertices = 200
-# data = load_data(init_vertices, d)
-# init_solutions = data[0]
+# init_solutions = [[(0,0)]]
+# init_vertices = 250
+data = load_data(400, d)
+init_solutions = data[0]
+
+
+# init_solutions = [[(i, j) for i in [0,-1,-2,-3] for j in [0,-1,-2,-3]]]
 
 chains = generate_solutions_with_step_storage(n, d, init_solutions = init_solutions, save_png=save_png)
 
