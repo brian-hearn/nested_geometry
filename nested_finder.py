@@ -83,12 +83,12 @@ def save_step_info(step_index, solutions, new_edges_list, total_edges_list, n, d
     file_path = os.path.join(folder_path, f"nestedsolns_d={d}_n={step_index+1}.json")
     with open(file_path, "w") as f:
         json.dump(step_data, f, indent=4, default=str)
-    print(f"Saved step info JSON: '{file_path}'")
+    print(f"Saved JSON to: '{file_path}'")
 
 # ------------------------
 # Main solver with step-by-step storage
 # ------------------------
-def generate_solutions_with_step_storage(m, n, d, init_solutions = [[(0,0)]], save_png=True):
+def generate_solutions_with_step_storage(n, d, init_solutions = [[(0,0)]], save_png=True):
     solutions = init_solutions
     chains = [[solution] for solution in init_solutions]
     init_num_vertices = len(init_solutions[0])
@@ -102,21 +102,11 @@ def generate_solutions_with_step_storage(m, n, d, init_solutions = [[(0,0)]], sa
 
     # Main loop
     for i in range(init_num_vertices+1, n+1):
-        print(i)
         entries = []
-        print('Current solutions:')
-        print(solutions)
-        print('Current chains:')
-        print(chains)
-        
-        print('zip(solutions, chains)')
-        print(tuple(zip(solutions, chains)))
         for sol, chain in zip(solutions, chains):
-            print('sol')
-            print(sol)
             candidates = [
                 (x, y)
-                for x in range(-i-math.ceil(d)-1, 2)
+                for x in range(-i-math.ceil(d)-1, i+math.ceil(d)+1)
                 for y in range(-i-math.ceil(d)-1, i+math.ceil(d)+1)
                 if (x, y) not in sol
             ]
@@ -190,9 +180,19 @@ def generate_solutions_with_step_storage(m, n, d, init_solutions = [[(0,0)]], sa
 
     return chains
 
-n = 350
-m = 25
-d = 1.1
-init_solutions = [[(0,0),(0,1),(0,2),(0,3)],[(2,2),(2,3),(3,2),(3,3)]]
-chains = generate_solutions_with_step_storage(m, n, d, init_solutions, save_png=True)
+# Terminate after finding solutions with n vertices
+n = 150
+# Join all vertices within a distance of d with an edge
+d = 1
+# Toggle whether pngs of solutions are saved
+save_png=True
+
+# Specify initial solutions
+# Can be loaded from existing JSONs
+init_solutions = [[(0,0)]]
+# init_vertices = 200
+# data = load_data(init_vertices, d)
+# init_solutions = data[0]
+
+chains = generate_solutions_with_step_storage(n, d, init_solutions = init_solutions, save_png=save_png)
 
