@@ -104,10 +104,14 @@ def generate_solutions_with_step_storage(n, d, init_solutions = [[(0,0)]], save_
     for i in range(init_num_vertices+1, n+1):
         entries = []
         for sol, chain in zip(solutions, chains):
+            min_x = min(p[0] for p in sol)
+            max_x = max(p[0] for p in sol)
+            min_y = min(p[1] for p in sol)
+            max_y = max(p[1] for p in sol)
             candidates = [
                 (x, y)
-                for x in range(-i-math.ceil(d)-1, i+math.ceil(d)+1)
-                for y in range(-i-math.ceil(d)-1, i+math.ceil(d)+1)
+                for x in range(min_x-math.ceil(d), max_x+math.ceil(d)+1)
+                for y in range(min_y-math.ceil(d), max_y+math.ceil(d)+1)
                 if (x, y) not in sol
             ]
             for p in candidates:
@@ -181,9 +185,9 @@ def generate_solutions_with_step_storage(n, d, init_solutions = [[(0,0)]], save_
     return chains
 
 # Terminate after finding solutions with n vertices
-n = 150
+n = 250
 # Join all vertices within a distance of d with an edge
-d = 1
+d = 5
 # Toggle whether pngs of solutions are saved
 save_png=True
 

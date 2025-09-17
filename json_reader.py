@@ -42,4 +42,14 @@ d = 1
 data = load_data(n, d)
 print_output(data)
 
-print(data[0])
+#####
+# sol = data[0][0]
+# print(sol)
+# min_x = min(p[0] for p in sol)
+# max_x = max(p[0] for p in sol)
+# min_y = min(p[1] for p in sol)
+# max_y = max(p[1] for p in sol)
+# print(min_x)
+# print(max_x)
+# print(min_y)
+# print(max_y)
