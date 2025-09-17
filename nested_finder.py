@@ -2,10 +2,8 @@ import matplotlib.pyplot as plt
 import os
 import math
 import json
+from json_reader import *
 
-# ------------------------
-# Utility functions
-# ------------------------
 def distance(p, q):
     return math.hypot(p[0]-q[0], p[1]-q[1])
 
@@ -77,7 +75,7 @@ def save_step_info(step_index, solutions, new_edges_list, total_edges_list, n, d
     os.makedirs(folder_path, exist_ok=True)
     serializable_solutions = [ [pt for pt in sol] for sol in solutions ]
     step_data = {
-        'step_index': step_index,
+        'number_of_vertices': step_index + 1,
         'solutions': serializable_solutions,
         'new_edges': new_edges_list,
         'total_edges': total_edges_list
@@ -85,31 +83,35 @@ def save_step_info(step_index, solutions, new_edges_list, total_edges_list, n, d
     file_path = os.path.join(folder_path, f"nestedsolns_d={d}_n={step_index+1}.json")
     with open(file_path, "w") as f:
         json.dump(step_data, f, indent=4, default=str)
-    print(f"Saved step info JSON: '{file_path}'")
+    print(f"Saved JSON to: '{file_path}'")
 
 # ------------------------
 # Main solver with step-by-step storage
 # ------------------------
-def generate_solutions_with_step_storage(m, n, d, save_png=True):
-    solutions = [[(0,0)]]
-    chains = [[[(0,0)]]]
-
-    # Step 0 info
-    new_edges_list = [0]
-    total_edges_list = [0]
-    if save_png:
-        save_step_png(solutions, 0, n, d)
-    save_step_info(0, solutions, new_edges_list, total_edges_list, n, d)
+def generate_solutions_with_step_storage(n, d, init_solutions = [[(0,0)]], save_png=True):
+    solutions = init_solutions
+    chains = [[solution] for solution in init_solutions]
+    init_num_vertices = len(init_solutions[0])
+    if init_num_vertices == 1:
+        # Step 0 info
+        new_edges_list = [0]
+        total_edges_list = [0]
+        if save_png:
+            save_step_png(solutions, 0, n, d)
+        save_step_info(0, solutions, new_edges_list, total_edges_list, n, d)
 
     # Main loop
-    for i in range(2, n+1):
+    for i in range(init_num_vertices+1, n+1):
         entries = []
         for sol, chain in zip(solutions, chains):
-            # Candidates restricted by solution size
+            min_x = min(p[0] for p in sol)
+            max_x = max(p[0] for p in sol)
+            min_y = min(p[1] for p in sol)
+            max_y = max(p[1] for p in sol)
             candidates = [
                 (x, y)
-                for x in range(-i, 2)
-                for y in range(-i, i+1)
+                for x in range(min_x-math.ceil(d), max_x+math.ceil(d)+1)
+                for y in range(min_y-math.ceil(d), max_y+math.ceil(d)+1)
                 if (x, y) not in sol
             ]
             for p in candidates:
@@ -182,8 +184,19 @@ def generate_solutions_with_step_storage(m, n, d, save_png=True):
 
     return chains
 
-n = 400
-m = 25
-d = 3
-chains = generate_solutions_with_step_storage(m, n, d, save_png=True)
+# Terminate after finding solutions with n vertices
+n = 250
+# Join all vertices within a distance of d with an edge
+d = 5
+# Toggle whether pngs of solutions are saved
+save_png=True
+
+# Specify initial solutions
+# Can be loaded from existing JSONs
+init_solutions = [[(0,0)]]
+# init_vertices = 200
+# data = load_data(init_vertices, d)
+# init_solutions = data[0]
+
+chains = generate_solutions_with_step_storage(n, d, init_solutions = init_solutions, save_png=save_png)
 
