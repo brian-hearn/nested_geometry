@@ -88,7 +88,7 @@ def save_step_info(step_index, solutions, new_edges_list, total_edges_list, n, d
 # ------------------------
 # Main solver with step-by-step storage
 # ------------------------
-def generate_solutions_with_step_storage(n, d, init_solutions = [[(0,0)]], save_png=True):
+def generate_solutions_with_step_storage(n, d, init_solutions = [[(0,0)]], init_edges = 0, save_png=True):
     solutions = init_solutions
     chains = [[solution] for solution in init_solutions]
     init_num_vertices = len(init_solutions[0])
@@ -143,6 +143,7 @@ def generate_solutions_with_step_storage(n, d, init_solutions = [[(0,0)]], save_
             new_edges_list.append(score)
             # Compute cumulative total edges
             prev_total = sum(f(chain[j], *chain[j+1][-1], d) for j in range(len(chain)-1)) if len(chain) > 1 else 0
+            prev_total += init_edges
             total_edges_list.append(prev_total + score)
 
         solutions = new_solutions
@@ -197,9 +198,9 @@ save_png=True
 # init_vertices = 250
 data = load_data(250, d)
 init_solutions = data[0]
-
+init_edges = data[2][0]
 
 # init_solutions = [[(i, j) for i in [0,-1,-2,-3] for j in [0,-1,-2,-3]]]
 
-chains = generate_solutions_with_step_storage(n, d, init_solutions = init_solutions, save_png=save_png)
+chains = generate_solutions_with_step_storage(n, d, init_solutions = init_solutions, init_edges = init_edges, save_png=save_png)
 
