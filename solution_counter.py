@@ -2,20 +2,13 @@ import math
 from itertools import combinations
 
 def euclidean_distance(v1, v2):
-    """Compute Euclidean distance between two vectors (lists)."""
+    """Compute distance between two vectors (lists)."""
     return math.sqrt(sum((a - b) ** 2 for a, b in zip(v1, v2)))
 
 def count_close_pairs(vectors, d):
     """
     Counts the number of pairs of vectors in the list
-    with Euclidean distance <= d.
-    
-    Args:
-        vectors (list of lists): The list of vectors.
-        d (float): Positive distance threshold.
-    
-    Returns:
-        int: Count of pairs with distance <= d.
+    with distance <= d.
     """
     if d <= 0:
         raise ValueError("d must be positive")
@@ -789,21 +782,28 @@ for i in range(-2,3):
     vectors.append([i,10])
 
 import math
-
-def vectors_within_distance(d):
+# Returns all vectors within a distance d of (0,0)
+def vectors_within_distance(dist):
     vectors = []
-    for x in range(-d, d + 1):
-        for y in range(-d, d + 1):
-            if math.sqrt(x**2 + y**2) <= d:
+    for x in range(-math.ceil(dist), math.ceil(dist) + 1):
+        for y in range(-math.ceil(dist), math.ceil(dist) + 1):
+            if math.sqrt(x**2 + y**2) <= dist:
                 vectors.append([x, y])
     return vectors
 
 # Run
-d = 3
-vectors = vectors_within_distance(10)
+d = 1.5
+vectors = vectors_within_distance(11)
 result = count_close_pairs(vectors, d)
 print(f"Side of inputted solution: {len(vectors)}")
 print(f"Join points within a distance of: {d}")
 print(f"Number of pairs with distance <= {d}: {result}")
+
+# Counterexamples:
+# d = 4.15
+# dist = 16
+# n = 797
+# Edges in circle soln: 19738
+# Edges in an optimal nested solution: 10343
 
 
