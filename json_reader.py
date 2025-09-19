@@ -35,12 +35,11 @@ def print_output(data):
         print(f"  total_edges: {total_edges[i]}")
         print()
 
-# n = input("Enter n: ")
-# d = input("Enter d: ")
-n = 13
-d = 1
-data = load_data(n, d)
-print_output(data)
+
+# n = 13
+# d = 1
+# data = load_data(n, d)
+# print_output(data)
 
 #####
 # sol = data[0][0]
